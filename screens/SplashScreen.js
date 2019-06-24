@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const SplashScreen = () => {
-  return (
-    <ImageBackground style={styles.container} source={require('../assets/images/booked-background.jpg')}>
-      <View style={styles.headerSection}>
-        <Text style={styles.header}>Booked</Text>
-        <Text style={styles.subheader}>Let's get reading.</Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPresee={() => {}}>
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </ImageBackground>
-  );
-};
+import { Colors } from '../styles';
+
+class SplashScreen extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+
+  render() {
+    return (
+      <ImageBackground style={styles.container} source={require('../assets/images/booked-background.jpg')}>
+        <View style={styles.headerSection}>
+          <Text style={styles.header}>Booked</Text>
+          <Text style={styles.subheader}>Let's get reading.</Text>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Onboarding')}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      </ImageBackground>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +35,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 36,
-    color: '#4B4B4B',
+    color: Colors.darkGray,
     fontWeight: '700',
   },
   subheader: {
@@ -36,7 +44,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#54A3FF',
+    backgroundColor: Colors.blue,
     height: 65,
     width: 215,
     borderRadius: 35,
