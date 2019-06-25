@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Colors } from '../styles';
 import CadenceSelectors from '../components/CadenceSelectors';
@@ -26,6 +26,7 @@ class OnboardingGoalScreen extends Component {
 
     this.onCadenceSelectorPress = this.onCadenceSelectorPress.bind(this);
     this.updateNumberOfBooks = this.updateNumberOfBooks.bind(this);
+    this.completeOnboarding = this.completeOnboarding.bind(this);
   }
 
   onCadenceSelectorPress(cadence) {
@@ -34,6 +35,17 @@ class OnboardingGoalScreen extends Component {
 
   updateNumberOfBooks(number) {
     this.setState({ numOfBooks: number });
+  }
+
+  completeOnboarding() {
+    const goal = {
+      cadence: this.state.cadence,
+      numOfBooks: this.state.numOfBooks,
+    };
+
+    const serializedGoal = JSON.stringify(goal);
+
+    AsyncStorage.setItem('goal', serializedGoal).then(() => this.props.navigation.navigate('InactiveBook'));
   }
 
   render() {
@@ -54,7 +66,7 @@ class OnboardingGoalScreen extends Component {
         )}
         {this.state.numOfBooks > 0 && (
           <View style={styles.continueSection}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={this.completeOnboarding}>
               <Text style={styles.buttonText}>{`Let's Read -> `}</Text>
             </TouchableOpacity>
             <Text style={styles.note}>You can always adjust your reading goals later</Text>
