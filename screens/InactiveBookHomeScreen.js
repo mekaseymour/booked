@@ -34,13 +34,15 @@ class InactiveBookHomeScreen extends Component {
 
   activateBook() {
     if (this.state.bookNameInput && this.titleIsNotEmptyString(this.state.bookNameInput)) {
-      setCompleteByDate();
-
       AsyncStorage.getItem('goal').then(data => {
         const goalData = JSON.parse(data);
-        goalData.book = this.state.bookNameInput;
+        const goalWithCompleteByDate = setCompleteByDate(goalData);
 
-        AsyncStorage.setItem('goal', JSON.stringify(goalData));
+        goalWithCompleteByDate.book = this.state.bookNameInput;
+
+        console.log('goal', JSON.stringify(goalWithCompleteByDate));
+
+        AsyncStorage.setItem('goal', JSON.stringify(goalWithCompleteByDate));
 
         this.props.navigation.navigate('ActiveBook');
       });

@@ -8,6 +8,10 @@ import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 import SplashScreen from './screens/SplashScreen';
 
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
