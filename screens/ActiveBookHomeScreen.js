@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AsyncStorage, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Svg from 'react-native-svg-uri';
 import moment from 'moment';
 
 import { Colors } from '../styles';
+import completeBook from '../helpers/completeBook';
 
 class ActiveBookHomeScreen extends Component {
   static navigationOptions = {
@@ -14,6 +16,7 @@ class ActiveBookHomeScreen extends Component {
 
     this.state = {
       bookTitle: null,
+      bookIsComplete: false,
     };
   }
 
@@ -35,6 +38,11 @@ class ActiveBookHomeScreen extends Component {
     return completeByDate.diff(todaysDate, 'days');
   }
 
+  finishBook = () => {
+    completeBook();
+    this.setState({ bookIsComplete: true });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -45,22 +53,26 @@ class ActiveBookHomeScreen extends Component {
           <Text style={styles.headerText}>to complete</Text>
         </View>
         <Text style={styles.bookTitle}>{this.state.bookTitle}</Text>
-        <View style={styles.buttonSection}>
-          <View style={styles.functionButtonSection}>
-            <TouchableOpacity style={styles.functionButton}>
-              <Text style={styles.buttonText}>New Word</Text>
+        {this.state.bookIsComplete ? (
+          <Svg height={100} width={100} source={require('../assets/images/checkmark.svg')} />
+        ) : (
+          <View style={styles.buttonSection}>
+            <View style={styles.functionButtonSection}>
+              <TouchableOpacity style={styles.functionButton}>
+                <Text style={styles.buttonText}>New Word</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.functionButton}>
+                <Text style={styles.buttonText}>Add Note</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.markCompleteButton} onPress={this.finishBook}>
+              <Text style={styles.markCompleteButtonText}>Mark as completed</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.functionButton}>
-              <Text style={styles.buttonText}>Add Note</Text>
+            <TouchableOpacity>
+              <Text style={styles.changeGoal}>change goal</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.markCompleteButton}>
-            <Text style={styles.markCompleteButtonText}>Mark as completed</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.changeGoal}>change goal</Text>
-          </TouchableOpacity>
-        </View>
+        )}
       </View>
     );
   }
@@ -72,6 +84,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    paddingLeft: '10%',
+    paddingRight: '10%',
   },
   goalNoticeSection: {
     textAlign: 'center',
