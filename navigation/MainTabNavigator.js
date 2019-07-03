@@ -1,15 +1,11 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import SplashScreen from '../screens/SplashScreen';
-import OnboardingGoalScreen from '../screens/OnboardingGoalScreen';
-import InactiveBookHomeScreen from '../screens/InactiveBookHomeScreen';
-import ActiveBookHomeScreen from '../screens/ActiveBookHomeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -45,20 +41,8 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-const SplashStack = createStackNavigator({
-  Splash: SplashScreen,
-  Onboarding: OnboardingGoalScreen,
-  InactiveBook: InactiveBookHomeScreen,
-  ActiveBook: ActiveBookHomeScreen,
-});
-
-SplashStack.navigationOptions = {
-  tabBarVisible: false,
-};
-
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-  SplashStack,
 });

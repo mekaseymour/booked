@@ -5,6 +5,8 @@ import moment from 'moment';
 
 import { Colors } from '../styles';
 import completeBook from '../helpers/completeBook';
+import CompletedBookScreen from './CompletedBookScreen';
+import getCompleteByDate from '../helpers/getCompleteByDate';
 
 class ActiveBookHomeScreen extends Component {
   static navigationOptions = {
@@ -17,19 +19,23 @@ class ActiveBookHomeScreen extends Component {
     this.state = {
       bookTitle: null,
       bookIsComplete: false,
+      goalExpiration: null,
     };
   }
 
-  componentDidMount() {
-    AsyncStorage.getItem('goal').then(data => {
-      const goal = JSON.parse(data);
+  componentWillMount = () => {
+    AsyncStorage.getItem('currentBook').then(book => {
+      if (book) {
+        const parsedBook = JSON.parse(book);
 
-      this.setState({
-        bookTitle: goal.book,
-        goalExpiration: goal.completeBy,
-      });
+        this.setState({ bookTitle: parsedBook.title, goalExpiration: parsedBook.completeByGoal });
+      }
     });
-  }
+
+    getCompleteByDate().then(data => {
+      this.setState({ goalExpiration: data });
+    });
+  };
 
   timeUntilGoalExpires() {
     const todaysDate = moment(new Date());
@@ -41,10 +47,13 @@ class ActiveBookHomeScreen extends Component {
   finishBook = () => {
     completeBook();
     this.setState({ bookIsComplete: true });
+    this.props.onBookComplete();
   };
 
   render() {
-    return (
+    return this.state.bookIsComplete ? (
+      <CompletedBookScreen bookTitle={this.state.bookTitle} />
+    ) : (
       <View style={styles.container}>
         <Text>You're on track!</Text>
         <View style={styles.goalNoticeSection}>
@@ -53,26 +62,14 @@ class ActiveBookHomeScreen extends Component {
           <Text style={styles.headerText}>to complete</Text>
         </View>
         <Text style={styles.bookTitle}>{this.state.bookTitle}</Text>
-        {this.state.bookIsComplete ? (
-          <Svg height={100} width={100} source={require('../assets/images/checkmark.svg')} />
-        ) : (
-          <View style={styles.buttonSection}>
-            <View style={styles.functionButtonSection}>
-              <TouchableOpacity style={styles.functionButton}>
-                <Text style={styles.buttonText}>New Word</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.functionButton}>
-                <Text style={styles.buttonText}>Add Note</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.markCompleteButton} onPress={this.finishBook}>
-              <Text style={styles.markCompleteButtonText}>Mark as completed</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.changeGoal}>change goal</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <View style={styles.buttonSection}>
+          <TouchableOpacity style={styles.markCompleteButton} onPress={this.finishBook}>
+            <Text style={styles.markCompleteButtonText}>Mark as completed</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.changeGoal}>change goal</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -112,24 +109,6 @@ const styles = StyleSheet.create({
   buttonSection: {
     alignItems: 'center',
     width: '100%',
-  },
-  functionButtonSection: {
-    flexDirection: 'row',
-    width: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  functionButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 65,
-    width: '50%',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: Colors.darkGray,
-    marginLeft: 5,
-    marginRight: 5,
   },
   markCompleteButton: {
     justifyContent: 'center',
