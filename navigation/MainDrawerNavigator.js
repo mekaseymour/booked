@@ -1,17 +1,17 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
 import { createDrawerNavigator } from 'react-navigation';
 
-import ActiveBookHomeScreen from '../screens/ActiveBookHomeScreen';
-import InactiveBookHomeScreen from '../screens/InactiveBookHomeScreen';
-import BookHomeScreen from '../screens/BookHomeScreen';
-
-const userIsCurrentlyReadingABook = async () => {
-  return await AsyncStorage.getItem('currentBook');
-};
+import WrapperScreen from '../screens/WrapperScreen';
+import BooksListScreen from '../screens/BooksListScreen';
+import BookHomeNavigator from './BookHomeNavigator';
 
 const MainDrawerNavigator = createDrawerNavigator({
-  Home: BookHomeScreen,
+  Home: BookHomeNavigator,
+  Books: props => (
+    <WrapperScreen {...props}>
+      <BooksListScreen {...props} />
+    </WrapperScreen>
+  ),
 });
 
 export default MainDrawerNavigator;

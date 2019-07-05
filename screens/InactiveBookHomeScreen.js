@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncStorage, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Svg from 'react-native-svg-uri';
 
 import { Colors } from '../styles';
 import getCompleteByDate from '../helpers/getCompleteByDate';
@@ -20,6 +21,12 @@ class InactiveBookHomeScreen extends Component {
     this.onBookNameInputChange = this.onBookNameInputChange.bind(this);
   }
 
+  componentWillMount() {
+    AsyncStorage.getItem('currentBook').then(data => {
+      if (data) this.props.navigation.navigate('Active');
+    });
+  }
+
   onBookNameInputChange(text) {
     this.setState({ bookNameInput: text });
   }
@@ -38,7 +45,7 @@ class InactiveBookHomeScreen extends Component {
         .then(data => {
           return setCurrentBook(this.state.bookNameInput, data);
         })
-        .then(() => this.props.onBookStart());
+        .then(() => this.props.navigation.navigate('Active'));
     } else {
       alert('please enter a book title');
     }
@@ -47,7 +54,9 @@ class InactiveBookHomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.icon} source={require('../assets/images/book-icon.png')} />
+        <View style={styles.iconWrapper}>
+          <Svg height={85} width={85} source={require('../assets/images/unicorn-icon.svg')} />
+        </View>
         <Text style={styles.subheader}>You are not currently reading anything</Text>
         <Text style={styles.header}>What book will you be reading next?</Text>
         <TextInput
@@ -70,9 +79,8 @@ class InactiveBookHomeScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: '25%',
+    marginTop: '15%',
     paddingLeft: '10%',
     paddingRight: '10%',
   },
@@ -104,9 +112,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 18,
   },
-  icon: {
-    height: 65,
-    width: 65,
+  iconWrapper: {
     marginBottom: 25,
   },
   inputSection: {
