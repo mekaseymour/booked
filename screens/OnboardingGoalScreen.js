@@ -45,7 +45,7 @@ class OnboardingGoalScreen extends Component {
 
     const serializedGoal = JSON.stringify(goal);
 
-    AsyncStorage.setItem('goal', serializedGoal).then(() => this.props.navigation.navigate('InactiveBook'));
+    AsyncStorage.setItem('goal', serializedGoal).then(() => this.props.navigation.navigate('Home'));
   }
 
   render() {

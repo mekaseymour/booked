@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { AsyncStorage, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { Colors } from '../styles';
-import setCompleteByDate from '../helpers/setCompleteByDate';
+import getCompleteByDate from '../helpers/getCompleteByDate';
+import setCurrentBook from '../helpers/storage/setCurrentBook';
 
 class InactiveBookHomeScreen extends Component {
   static navigationOptions = {
@@ -17,14 +18,13 @@ class InactiveBookHomeScreen extends Component {
     };
 
     this.onBookNameInputChange = this.onBookNameInputChange.bind(this);
-    this.activateBook = this.activateBook.bind(this);
   }
 
   onBookNameInputChange(text) {
     this.setState({ bookNameInput: text });
   }
 
-  titleIsNotEmptyString(title) {
+  titleIsNotStringWithOnlySpaces(title) {
     for (let i = 0; i < title.length; i++) {
       if (title[i] !== ' ') return true;
     }
@@ -32,24 +32,17 @@ class InactiveBookHomeScreen extends Component {
     return false;
   }
 
-  activateBook() {
-    if (this.state.bookNameInput && this.titleIsNotEmptyString(this.state.bookNameInput)) {
-      AsyncStorage.getItem('goal').then(data => {
-        const goalData = JSON.parse(data);
-        const goalWithCompleteByDate = setCompleteByDate(goalData);
-
-        goalWithCompleteByDate.book = this.state.bookNameInput;
-
-        console.log('goal', JSON.stringify(goalWithCompleteByDate));
-
-        AsyncStorage.setItem('goal', JSON.stringify(goalWithCompleteByDate));
-
-        this.props.navigation.navigate('ActiveBook');
-      });
+  activateBook = () => {
+    if (this.state.bookNameInput && this.titleIsNotStringWithOnlySpaces(this.state.bookNameInput)) {
+      getCompleteByDate()
+        .then(data => {
+          return setCurrentBook(this.state.bookNameInput, data);
+        })
+        .then(() => this.props.onBookStart());
     } else {
       alert('please enter a book title');
     }
-  }
+  };
 
   render() {
     return (
@@ -61,6 +54,8 @@ class InactiveBookHomeScreen extends Component {
           style={styles.input}
           onChangeText={text => this.onBookNameInputChange(text)}
           value={this.state.bookNameInput}
+          autoCapitalize="words"
+          autoFocus={true}
         />
         <View style={styles.inputSection}>
           <Text style={styles.inputHint}>enter book title</Text>
