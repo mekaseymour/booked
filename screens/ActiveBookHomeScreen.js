@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { AsyncStorage, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Svg from 'react-native-svg-uri';
 import moment from 'moment';
 
 import { Colors } from '../styles';
 import completeBook from '../helpers/completeBook';
-import CompletedBookScreen from './CompletedBookScreen';
 import getCompleteByDate from '../helpers/getCompleteByDate';
 
 class ActiveBookHomeScreen extends Component {
@@ -18,7 +16,6 @@ class ActiveBookHomeScreen extends Component {
 
     this.state = {
       bookTitle: null,
-      bookIsComplete: false,
       goalExpiration: null,
     };
   }
@@ -46,14 +43,11 @@ class ActiveBookHomeScreen extends Component {
 
   finishBook = () => {
     completeBook();
-    this.setState({ bookIsComplete: true });
-    this.props.onBookComplete();
+    this.props.navigation.navigate('Complete');
   };
 
   render() {
-    return this.state.bookIsComplete ? (
-      <CompletedBookScreen bookTitle={this.state.bookTitle} />
-    ) : (
+    return (
       <View style={styles.container}>
         <Text>You're on track!</Text>
         <View style={styles.goalNoticeSection}>
@@ -77,7 +71,6 @@ class ActiveBookHomeScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',

@@ -13,7 +13,7 @@ if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
 
-AsyncStorage.multiRemove(['goal', 'pastBooks', 'currentBook']);
+// AsyncStorage.multiRemove(['goal', 'pastBooks', 'currentBook']);
 
 AsyncStorage.getAllKeys()
   .then(keys => console.log('All AsyncStorage keys', keys))
@@ -32,7 +32,6 @@ export default function App(props) {
     );
   } else {
     return (
-      // <SplashScreen />
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
@@ -49,6 +48,8 @@ async function loadResourcesAsync() {
       require('./assets/images/booked-background.jpg'),
       require('./assets/images/book-icon.png'),
       require('./assets/images/checkmark.svg'),
+      require('./assets/images/hamburger-menu-icon.svg'),
+      require('./assets/images/unicorn-icon.svg'),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
