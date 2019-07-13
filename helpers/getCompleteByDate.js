@@ -15,21 +15,20 @@ const getYearFromTodayDate = () => {
   return new Date(date.setFullYear(date.getFullYear() + 1));
 };
 
-const getCompleteByDate = () => {
-  return AsyncStorage.getItem('goal').then(goal => {
-    const parsedGoal = JSON.parse(goal);
+const getCompleteByDate = async providedGoal => {
+  const goal = providedGoal || (await AsyncStorage.getItem('goal'));
+  const parsedGoal = JSON.parse(goal);
 
-    switch (parsedGoal.cadence) {
-      case 'weekly':
-        return Promise.resolve(getWeekFromTodayDate().toLocaleDateString());
-      case 'monthly':
-        return Promise.resolve(getMonthFromTodayDate().toLocaleDateString());
-      case 'yearly':
-        return Promise.resolve(getYearFromTodayDate().toLocaleDateString());
-      default:
-        return Promise.reject('No cadence set for goal');
-    }
-  });
+  switch (parsedGoal.cadence) {
+    case 'weekly':
+      return Promise.resolve(getWeekFromTodayDate().toLocaleDateString());
+    case 'monthly':
+      return Promise.resolve(getMonthFromTodayDate().toLocaleDateString());
+    case 'yearly':
+      return Promise.resolve(getYearFromTodayDate().toLocaleDateString());
+    default:
+      return Promise.reject('No cadence set for goal');
+  }
 };
 
 export default getCompleteByDate;

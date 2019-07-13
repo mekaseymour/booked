@@ -5,3 +5,8 @@ export const header = {
   fontSize: 36,
   fontWeight: '700',
 };
+
+export const title = {
+  fontSize: 22,
+  fontWeight: '500',
+};

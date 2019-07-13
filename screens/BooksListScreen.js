@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AsyncStorage, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Svg from 'react-native-svg-uri';
+import { fetchPastBooks } from '../helpers/fetchFromStorage';
 
 class BooksListScreen extends Component {
   constructor(props) {
@@ -16,18 +17,14 @@ class BooksListScreen extends Component {
     this.fetchBooksFromStorage();
   }
 
-  fetchBooksFromStorage = () => {
-    AsyncStorage.getItem('pastBooks').then(data => {
-      if (data) {
-        const parsedBooks = JSON.parse(data);
+  fetchBooksFromStorage = async () => {
+    const books = await fetchPastBooks();
 
-        const booksForState = parsedBooks.map((book, i) => {
-          return { ...JSON.parse(book), key: `book-${i}` };
-        });
-
-        this.setState({ books: booksForState });
-      }
+    const booksForState = books.map((book, i) => {
+      return { ...JSON.parse(book), key: `book-${i}` };
     });
+
+    this.setState({ books: booksForState });
   };
 
   render() {
@@ -37,11 +34,11 @@ class BooksListScreen extends Component {
         {!!this.state.books ? (
           <FlatList
             style={styles.list}
-            data={this.state.books}
+            data={this.state.books.reverse()}
             renderItem={({ item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listIconWrapper}>
-                  <Svg height={35} width={35} source={require('../assets/images/single-book-icon.svg')} />
+                  <Svg height={35} width={35} source={require('../assets/images/closed-book-icon.svg')} />
                 </View>
                 <View>
                   <Text style={styles.listItemHeader}>{item.title}</Text>
