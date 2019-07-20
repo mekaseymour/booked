@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { AsyncStorage, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Svg from 'react-native-svg-uri';
 
 import { Colors } from '../styles';
 import getCompleteByDate from '../helpers/getCompleteByDate';
 import setCurrentBook from '../helpers/storage/setCurrentBook';
+import LoadingPlaceholder from '../components/LoadingPlaceholder';
 
 class InactiveBookHomeScreen extends Component {
   static navigationOptions = {
@@ -16,6 +17,7 @@ class InactiveBookHomeScreen extends Component {
 
     this.state = {
       bookNameInput: null,
+      loading: true,
     };
 
     this.onBookNameInputChange = this.onBookNameInputChange.bind(this);
@@ -23,7 +25,11 @@ class InactiveBookHomeScreen extends Component {
 
   componentWillMount() {
     AsyncStorage.getItem('currentBook').then(data => {
-      if (data) this.props.navigation.navigate('Active');
+      if (data) {
+        this.props.navigation.navigate('Active');
+      } else {
+        this.setState({ loading: false });
+      }
     });
   }
 
@@ -52,7 +58,9 @@ class InactiveBookHomeScreen extends Component {
   };
 
   render() {
-    return (
+    return this.state.loading ? (
+      <LoadingPlaceholder />
+    ) : (
       <View style={styles.container}>
         <View style={styles.iconWrapper}>
           <Svg height={85} width={85} source={require('../assets/images/unicorn-icon.svg')} />

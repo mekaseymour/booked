@@ -8,7 +8,7 @@ import BookHomeNavigator from './BookHomeNavigator';
 const MainDrawerNavigator = createDrawerNavigator({
   Home: BookHomeNavigator,
   Books: props => (
-    <WrapperScreen {...props}>
+    <WrapperScreen {...props} title="Completed Books">
       <BooksListScreen {...props} />
     </WrapperScreen>
   ),

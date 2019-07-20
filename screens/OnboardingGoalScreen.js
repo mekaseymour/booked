@@ -4,6 +4,8 @@ import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import { Colors } from '../styles';
 import CadenceSelectors from '../components/CadenceSelectors';
 import Counter from '../components/Counter';
+import getCompleteByDate from '../helpers/getCompleteByDate';
+import LoadingPlaceholder from '../components/LoadingPlaceholder';
 
 const cadenceTextMapping = {
   weekly: 'week',
@@ -22,6 +24,7 @@ class OnboardingGoalScreen extends Component {
     this.state = {
       cadence: null,
       numOfBooks: 0,
+      loading: false,
     };
 
     this.onCadenceSelectorPress = this.onCadenceSelectorPress.bind(this);
@@ -45,11 +48,35 @@ class OnboardingGoalScreen extends Component {
 
     const serializedGoal = JSON.stringify(goal);
 
-    AsyncStorage.setItem('goal', serializedGoal).then(() => this.props.navigation.navigate('Home'));
+    this.setState({ loading: true });
+
+    AsyncStorage.setItem('goal', serializedGoal).then(() => this.updateBookGoal());
   }
 
+  updateBookGoal = () => {
+    AsyncStorage.getItem('currentBook').then(book => {
+      if (book) {
+        const parsedBook = JSON.parse(book);
+
+        getCompleteByDate().then(data => {
+          if (data) {
+            parsedBook.completeByGoal = data;
+
+            console.log('parsedBook', parsedBook);
+
+            AsyncStorage.setItem('currentBook', JSON.stringify(parsedBook));
+
+            this.props.navigation.navigate('Home');
+          }
+        });
+      }
+    });
+  };
+
   render() {
-    return (
+    return this.state.loading ? (
+      <LoadingPlaceholder />
+    ) : (
       <View style={styles.container}>
         <Text style={styles.headerText}>Set a goal.</Text>
         <View>
