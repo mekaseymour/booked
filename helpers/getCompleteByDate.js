@@ -1,33 +1,22 @@
 import { AsyncStorage } from 'react-native';
-
-const getWeekFromTodayDate = () => {
-  const date = new Date();
-  return new Date(date.setDate(date.getDate() + 7));
-};
-
-const getMonthFromTodayDate = () => {
-  const date = new Date();
-  return new Date(date.setMonth(date.getMonth() + 1));
-};
-
-const getYearFromTodayDate = () => {
-  const date = new Date();
-  return new Date(date.setFullYear(date.getFullYear() + 1));
-};
+import * as Cadence from '../util/cadence';
 
 const getCompleteByDate = async providedGoal => {
   const goal = providedGoal || (await AsyncStorage.getItem('goal'));
   const parsedGoal = JSON.parse(goal);
 
-  switch (parsedGoal.cadence) {
-    case 'weekly':
-      return Promise.resolve(getWeekFromTodayDate().toLocaleDateString());
-    case 'monthly':
-      return Promise.resolve(getMonthFromTodayDate().toLocaleDateString());
-    case 'yearly':
-      return Promise.resolve(getYearFromTodayDate().toLocaleDateString());
-    default:
-      return Promise.reject('No cadence set for goal');
+  const todaysDate = new Date();
+
+  if (parsedGoal.cadenceUnit === Cadence.DAY) {
+    const futureDate = new Date(todaysDate.setDate(todaysDate.getDate() + parsedGoal.cadenceMultiplier));
+    return Promise.resolve(futureDate.toLocaleDateString());
+  } else {
+    const futureDate = new Date(
+      todaysDate.setDate(
+        todaysDate.getDate() + Cadence.cadenceUnitsToDaysMapping[parsedGoal.cadenceUnit] * parsedGoal.cadenceMultiplier
+      )
+    );
+    return Promise.resolve(futureDate.toLocaleDateString());
   }
 };
 

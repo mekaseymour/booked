@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg from 'react-native-svg-uri';
 
-import { Layout, Typography } from '../styles';
+import { Colors, Layout, Typography } from '../styles';
 
 class WrapperScreen extends Component {
   constructor(props) {
@@ -18,14 +18,24 @@ class WrapperScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.headerSection}>
+        <View style={title ? styles.headerSectionWithTitle : styles.headerSection}>
           <TouchableOpacity style={styles.menu} onPress={this.onMenuTouch}>
-            <Svg height={30} width={30} source={require('../assets/images/hamburger-menu-icon.svg')} />
+            <Svg
+              height={30}
+              width={25}
+              source={
+                title
+                  ? require('../assets/images/light-hamburger-menu-icon.svg')
+                  : require('../assets/images/hamburger-menu-icon.svg')
+              }
+              fill={Colors.white}
+              fillAll={true}
+            />
           </TouchableOpacity>
           <Text style={styles.title}>{title}</Text>
           <View style={styles.headerPlaceholder} />
         </View>
-        {children}
+        <View style={styles.contentSection}>{children}</View>
       </View>
     );
   }
@@ -34,14 +44,21 @@ class WrapperScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: '10%',
-    marginBottom: '10%',
-    marginRight: '5%',
-    marginLeft: '5%',
   },
   headerSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingTop: 30,
+    paddingRight: '5%',
+    paddingLeft: '5%',
+  },
+  headerSectionWithTitle: {
+    backgroundColor: Colors.orange,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 30,
+    paddingRight: '5%',
+    paddingLeft: '5%',
   },
   headerPlaceholder: {
     width: 30,
@@ -51,6 +68,13 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Typography.title,
+    color: Colors.white,
+  },
+  contentSection: {
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    flexDirection: 'column',
+    flex: 1,
   },
 });
 

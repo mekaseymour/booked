@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Svg from 'react-native-svg-uri';
 
-import { Typography } from '../styles';
+import { Button, Colors, Typography } from '../styles';
+import { timeBetweenBookStartAndEnd } from '../helpers/lengthOfTimeToFinishBook';
+
+const SCREEN_PRIMARY_COLOR = Colors.pink;
 
 class CompletedBookScreen extends Component {
   render() {
-    const { bookTitle, navigation } = this.props;
+    const { navigation } = this.props;
+    const book = navigation.getParam('book');
 
     return (
       <View style={styles.container}>
-        <Text style={Typography.header}>Another one in the books!</Text>
-        <Svg height={100} width={100} source={require('../assets/images/checkmark.svg')} />
-        <Text>You just finished</Text>
-        <Text>{bookTitle}</Text>
-        <Button title="Start a new book" onPress={() => navigation.navigate('Inactive')} />
+        <View style={styles.sectionWrapper}>
+          <View style={styles.iconWrapper}>
+            <Svg height={50} width={50} source={require('../assets/images/applause-icon.svg')} />
+            <Svg height={50} width={50} source={require('../assets/images/confetti-icon.svg')} />
+          </View>
+          <Text style={Typography.secondaryHeader}>Another one in the books!</Text>
+          <Text style={Typography.screenHeader}>You finished</Text>
+          <Text style={styles.highlightedHeader}>{book.title}</Text>
+          <Text style={styles.highlightedHeader}>{`in ${timeBetweenBookStartAndEnd(book)} days`}</Text>
+        </View>
+        <TouchableOpacity style={styles.ctaButton} onPress={() => navigation.navigate('Inactive')}>
+          <Text style={Typography.buttonText}>Let's read another -></Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -22,8 +34,28 @@ class CompletedBookScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: '10%',
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    justifyContent: 'space-between',
+  },
+  highlightedHeader: {
+    ...Typography.screenHeader,
+    color: SCREEN_PRIMARY_COLOR,
+  },
+  iconWrapper: {
+    flexDirection: 'row',
+    marginBottom: 25,
+  },
+  sectionWrapper: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  ctaButton: {
+    ...Button.ctaButton,
+    backgroundColor: Colors.pink,
   },
 });
 

@@ -3,6 +3,7 @@ import { AsyncStorage, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Svg from 'react-native-svg-uri';
 import { fetchPastBooks } from '../helpers/fetchFromStorage';
+import { timeBetweenPastBookStartAndEnd } from '../helpers/lengthOfTimeToFinishBook';
 
 class BooksListScreen extends Component {
   constructor(props) {
@@ -38,10 +39,11 @@ class BooksListScreen extends Component {
             renderItem={({ item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listIconWrapper}>
-                  <Svg height={35} width={35} source={require('../assets/images/closed-book-icon.svg')} />
+                  <Svg height={50} width={50} source={require('../assets/images/muscle-icon.svg')} />
                 </View>
                 <View>
                   <Text style={styles.listItemHeader}>{item.title}</Text>
+                  <Text>{`Finished in ${timeBetweenPastBookStartAndEnd(item)}`}</Text>
                   <Text>{`${item.startDate}-${item.completedDate}`}</Text>
                 </View>
               </View>

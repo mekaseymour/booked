@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { AsyncStorage, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Svg from 'react-native-svg-uri';
 
-import { Colors } from '../styles';
+import { Button, Colors, Input, Typography } from '../styles';
 import getCompleteByDate from '../helpers/getCompleteByDate';
 import setCurrentBook from '../helpers/storage/setCurrentBook';
 import LoadingPlaceholder from '../components/LoadingPlaceholder';
+import { textInputIsValid } from '../util/validation';
+
+const SCREEN_PRIMARY_COLOR = Colors.purple;
 
 class InactiveBookHomeScreen extends Component {
   static navigationOptions = {
@@ -37,16 +40,8 @@ class InactiveBookHomeScreen extends Component {
     this.setState({ bookNameInput: text });
   }
 
-  titleIsNotStringWithOnlySpaces(title) {
-    for (let i = 0; i < title.length; i++) {
-      if (title[i] !== ' ') return true;
-    }
-
-    return false;
-  }
-
   activateBook = () => {
-    if (this.state.bookNameInput && this.titleIsNotStringWithOnlySpaces(this.state.bookNameInput)) {
+    if (this.state.bookNameInput && textInputIsValid(this.state.bookNameInput)) {
       getCompleteByDate()
         .then(data => {
           return setCurrentBook(this.state.bookNameInput, data);
@@ -62,22 +57,24 @@ class InactiveBookHomeScreen extends Component {
       <LoadingPlaceholder />
     ) : (
       <View style={styles.container}>
-        <View style={styles.iconWrapper}>
-          <Svg height={85} width={85} source={require('../assets/images/unicorn-icon.svg')} />
+        <View style={styles.sectionWrapper}>
+          <View style={styles.iconWrapper}>
+            <Svg height={38} width={40} source={require('../assets/images/dragon-icon.svg')} />
+          </View>
+          <Text style={styles.subHeader}>You are not currently reading anything</Text>
+          <Text style={styles.header}>What book will you be reading?</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={text => this.onBookNameInputChange(text)}
+            value={this.state.bookNameInput}
+            autoCapitalize="words"
+            placeholder="book title"
+            placeholderTextColor={Colors.gray}
+          />
         </View>
-        <Text style={styles.subheader}>You are not currently reading anything</Text>
-        <Text style={styles.header}>What book will you be reading next?</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={text => this.onBookNameInputChange(text)}
-          value={this.state.bookNameInput}
-          autoCapitalize="words"
-          autoFocus={true}
-        />
-        <View style={styles.inputSection}>
-          <Text style={styles.inputHint}>enter book title</Text>
+        <View style={styles.sectionWrapper}>
           <TouchableOpacity style={styles.button} onPress={this.activateBook}>
-            <Text style={styles.buttonText}>Start reading</Text>
+            <Text style={Typography.buttonText}>Start book</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -87,59 +84,39 @@ class InactiveBookHomeScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
-    marginTop: '15%',
-    paddingLeft: '10%',
-    paddingRight: '10%',
+    paddingTop: '10%',
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    justifyContent: 'space-between',
   },
   header: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: Colors.blue,
-    textAlign: 'left',
-    width: '100%',
+    ...Typography.screenHeader,
+    color: SCREEN_PRIMARY_COLOR,
+    textAlign: 'center',
     marginTop: 15,
   },
-  subheader: {
-    fontSize: 14,
+  subHeader: {
+    ...Typography.subHeader,
     color: Colors.darkGray,
-    textAlign: 'left',
-    width: '100%',
   },
   button: {
-    backgroundColor: Colors.blue,
-    height: 65,
-    width: '80%',
-    borderRadius: 30,
-    marginTop: 65,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 18,
+    ...Button.ctaButton,
+    backgroundColor: SCREEN_PRIMARY_COLOR,
   },
   iconWrapper: {
     marginBottom: 25,
   },
-  inputSection: {
-    width: '90%',
+  sectionWrapper: {
+    width: '100%',
     alignItems: 'center',
   },
-  input: {
-    width: '100%',
-    textAlign: 'left',
-    height: 45,
-    borderBottomWidth: 3,
-    borderBottomColor: Colors.blue,
-  },
-  inputHint: {
-    marginTop: 10,
-    color: Colors.blue,
-    fontSize: 12,
-    textAlign: 'left',
-    width: '100%',
+  textInput: {
+    ...Input.mainInput,
+    borderColor: Colors.gray,
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
 
