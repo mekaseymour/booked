@@ -2,12 +2,12 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 import SplashScreen from '../screens/SplashScreen';
-import OnboardingGoalScreen from '../screens/OnboardingGoalScreen';
+import SetGoalScreen from '../screens/SetGoalScreen';
 import MainDrawerNavigator from './MainDrawerNavigator';
 
 const SplashStack = createStackNavigator({
   Splash: SplashScreen,
-  Onboarding: OnboardingGoalScreen,
+  Onboarding: SetGoalScreen,
   Home: {
     screen: MainDrawerNavigator,
     navigationOptions: {

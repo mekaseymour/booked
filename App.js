@@ -13,7 +13,7 @@ if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
 
-// AsyncStorage.multiRemove(['goal', 'pastBooks', 'currentBook']);
+AsyncStorage.multiRemove(['goal', 'pastBooks', 'currentBook']);
 
 AsyncStorage.getAllKeys()
   .then(keys => console.log('All AsyncStorage keys', keys))
@@ -43,12 +43,11 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./assets/images/robot-dev.png'),
-      require('./assets/images/robot-prod.png'),
       require('./assets/images/booked-background.jpg'),
       require('./assets/images/checkmark.svg'),
       require('./assets/images/hamburger-menu-icon.svg'),
       require('./assets/images/unicorn-icon.svg'),
+      require('./assets/images/summit-icon.svg'),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar

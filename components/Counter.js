@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Colors, Input, Typography } from '../styles';
 
 class Counter extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      number: 0,
+      number: null,
     };
 
     this.increment = this.increment.bind(this);
@@ -14,15 +15,18 @@ class Counter extends Component {
   }
 
   increment() {
-    const incremented = this.state.number + 1;
+    const number = this.state.number || this.props.defaultCount;
+    const incremented = number + 1;
 
     this.setState({ number: incremented });
     this.props.updateNumber(incremented);
   }
 
   decrement() {
-    if (this.state.number > 0) {
-      const decremented = this.state.number - 1;
+    const number = this.state.number || this.props.defaultCount;
+
+    if (number > 1) {
+      const decremented = number - 1;
 
       this.setState({ number: decremented });
       this.props.updateNumber(decremented);
@@ -32,11 +36,11 @@ class Counter extends Component {
   render() {
     return (
       <View style={styles.counterContainer}>
-        <TouchableOpacity style={styles.button} onPress={this.decrement}>
+        <TouchableOpacity onPress={this.decrement}>
           <Text style={styles.counterText}> - </Text>
         </TouchableOpacity>
-        <Text style={styles.number}>{this.state.number}</Text>
-        <TouchableOpacity style={styles.button} onPress={this.increment}>
+        <Text style={styles.number}>{this.state.number || this.props.defaultCount}</Text>
+        <TouchableOpacity onPress={this.increment}>
           <Text style={styles.counterText}> + </Text>
         </TouchableOpacity>
       </View>
@@ -46,28 +50,20 @@ class Counter extends Component {
 
 const styles = StyleSheet.create({
   counterContainer: {
-    flexDirection: 'row',
+    ...Input.mainInput,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 50,
-    width: 50,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: 'white',
+    justifyContent: 'space-between',
+    borderColor: Colors.white,
+    marginTop: 25,
+    marginBottom: 25,
   },
   counterText: {
     fontSize: 24,
     color: 'white',
   },
   number: {
-    fontSize: 24,
+    ...Typography.inputText,
     color: 'white',
-    marginLeft: 20,
-    marginRight: 20,
   },
 });
 

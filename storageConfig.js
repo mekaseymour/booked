@@ -5,7 +5,7 @@ STORAGE SHAPE
 {
   currentBook: Book:String,
   previousBooks: [Book]:String,
-  goal: Goal:String,
+  goal: Number:String,
 }
 
 */
@@ -24,8 +24,8 @@ Book = {
 /*
 
 Goal = {
-  cadence: { daily || weekly || yearly }:String,
-  numOfBooks: Number:String,
+  cadenceUnit: { day | week | month | year }:String,
+  cadenceMultiplier: Number:String,
 }
 
 */
