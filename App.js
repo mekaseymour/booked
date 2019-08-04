@@ -13,12 +13,6 @@ if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
 
-AsyncStorage.multiRemove(['goal', 'pastBooks', 'currentBook']);
-
-AsyncStorage.getAllKeys()
-  .then(keys => console.log('All AsyncStorage keys', keys))
-  .catch(err => console.log(err));
-
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
