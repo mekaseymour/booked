@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import moment from 'moment';
 import Svg from 'react-native-svg-uri';
@@ -48,6 +48,13 @@ class ActiveBookHomeScreen extends Component {
     this.setState({ loading: false });
   };
 
+  showConfirmationAlert = () => {
+    Alert.alert('Are you sure you want to finish this book?', 'This book will be added to your completed list.', [
+      { text: 'Finish Book', onPress: this.finishBook },
+      { text: 'Cancel', onPress: () => console.log('cancel'), style: 'cancel' },
+    ]);
+  };
+
   finishBook = () => {
     completeBook();
     this.props.navigation.navigate('Complete', { book: this.state.book });
@@ -66,7 +73,7 @@ class ActiveBookHomeScreen extends Component {
           <Text style={styles.secondaryHeader}>{`${this.state.daysUntilGoalComplete} days left to meet goal`}</Text>
         </View>
         <View style={styles.sectionWrapper}>
-          <TouchableOpacity style={styles.ctaButton} onPress={this.finishBook}>
+          <TouchableOpacity style={styles.ctaButton} onPress={this.showConfirmationAlert}>
             <Text style={Typography.buttonText}>Finish book</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Onboarding')}>
@@ -77,37 +84,6 @@ class ActiveBookHomeScreen extends Component {
     );
   }
 }
-
-// const userIsBehindOnReadingGoal = this.state.daysUntilGoalComplete < 0;
-//
-// return this.state.loading ? (
-//   <LoadingPlaceholder />
-// ) : (
-//   <View style={styles.container}>
-//     <NavigationEvents onWillFocus={this.timeUntilGoalExpires} />
-//     <Text>{userIsBehindOnReadingGoal ? `You're behind on your goal!` : `You're on track!`}</Text>
-//     <View style={styles.goalNoticeSection}>
-//       {userIsBehindOnReadingGoal ? (
-//         <Text>{`You are ${Math.abs(this.state.daysUntilGoalComplete)} behind on completing`}</Text>
-//       ) : (
-//         <View>
-//           <Text style={styles.headerText}>You have</Text>
-//           <Text style={styles.mainContentText}>{`${this.state.daysUntilGoalComplete} days`}</Text>
-//           <Text style={styles.headerText}>to complete</Text>
-//         </View>
-//       )}
-//     </View>
-//     <Text style={styles.bookTitle}>{this.state.bookTitle}</Text>
-//     <View style={styles.buttonSection}>
-//       <TouchableOpacity style={styles.markCompleteButton} onPress={this.finishBook}>
-//         <Text style={styles.markCompleteButtonText}>Mark as completed</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity onPress={() => this.props.navigation.navigate('Onboarding')}>
-//         <Text style={styles.changeGoal}>change goal</Text>
-//       </TouchableOpacity>
-//     </View>
-//   </View>
-// );
 
 const styles = StyleSheet.create({
   container: {
