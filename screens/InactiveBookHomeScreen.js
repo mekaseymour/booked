@@ -21,6 +21,7 @@ class InactiveBookHomeScreen extends Component {
 
     this.state = {
       bookNameInput: null,
+      numOfPagesInput: null,
       loading: true,
     };
 
@@ -41,6 +42,10 @@ class InactiveBookHomeScreen extends Component {
     this.setState({ bookNameInput: text });
   }
 
+  onNumOfPagesChanges = input => {
+    this.setState({ numOfPagesInput: input });
+  };
+
   activateBook = () => {
     if (this.state.bookNameInput && textInputIsValid(this.state.bookNameInput)) {
       getCompleteByDate()
@@ -49,10 +54,10 @@ class InactiveBookHomeScreen extends Component {
             startDate: getTodaysDateAsLocaleString(),
             title: this.state.bookNameInput,
             completeByGoal: data,
+            pages: this.state.numOfPagesInput,
           };
 
           this.props.startBook(bookData);
-          return setCurrentBook(this.state.bookNameInput, data);
         })
         .then(() => this.props.navigation.navigate('Active'));
     } else {
@@ -67,7 +72,7 @@ class InactiveBookHomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.sectionWrapper}>
           <View style={styles.iconWrapper}>
-            <Svg height={38} width={40} source={require('../assets/images/dragon-icon.svg')} />
+            <Svg height={76} width={80} source={require('../assets/images/dragon-icon.svg')} />
           </View>
           <Text style={styles.subHeader}>You are not currently reading anything</Text>
           <Text style={styles.header}>What book will you be reading?</Text>
@@ -77,6 +82,14 @@ class InactiveBookHomeScreen extends Component {
             value={this.state.bookNameInput}
             autoCapitalize="words"
             placeholder="book title"
+            placeholderTextColor={Colors.gray}
+          />
+          <TextInput
+            style={styles.textInput}
+            onChangeText={input => this.onNumOfPagesChanges(input)}
+            value={this.state.numOfPagesInput}
+            keyboardType="numeric"
+            placeholder="number of pages"
             placeholderTextColor={Colors.gray}
           />
         </View>
