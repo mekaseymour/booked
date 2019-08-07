@@ -67,7 +67,7 @@ class InactiveBookHomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.sectionWrapper}>
           <View style={styles.iconWrapper}>
-            <Svg height={38} width={40} source={require('../assets/images/dragon-icon.svg')} />
+            <Svg height={76} width={80} source={require('../assets/images/dragon-icon.svg')} />
           </View>
           <Text style={styles.subHeader}>You are not currently reading anything</Text>
           <Text style={styles.header}>What book will you be reading?</Text>

@@ -16,8 +16,8 @@ class CompletedBookScreen extends Component {
       <View style={styles.container}>
         <View style={styles.sectionWrapper}>
           <View style={styles.iconWrapper}>
-            <Svg height={50} width={50} source={require('../assets/images/applause-icon.svg')} />
-            <Svg height={50} width={50} source={require('../assets/images/confetti-icon.svg')} />
+            <Svg height={80} width={80} source={require('../assets/images/applause-icon.svg')} />
+            <Svg height={80} width={80} source={require('../assets/images/confetti-icon.svg')} />
           </View>
           <Text style={Typography.secondaryHeader}>Another one in the books!</Text>
           <Text style={Typography.screenHeader}>You finished</Text>

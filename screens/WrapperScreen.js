@@ -48,17 +48,19 @@ const styles = StyleSheet.create({
   headerSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 30,
+    paddingTop: 40,
     paddingRight: '5%',
     paddingLeft: '5%',
+    height: '10%',
   },
   headerSectionWithTitle: {
     backgroundColor: Colors.orange,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 30,
+    paddingTop: 40,
     paddingRight: '5%',
     paddingLeft: '5%',
+    height: '10%',
   },
   headerPlaceholder: {
     width: 30,

@@ -50,7 +50,7 @@ class ActiveBookHomeScreen extends Component {
     ) : (
       <View style={styles.container}>
         <View style={styles.sectionWrapper}>
-          <Svg width={44} height={57} source={require('../assets/images/unicorn-icon.svg')} />
+          <Svg width={88} height={114} source={require('../assets/images/unicorn-icon.svg')} />
           <Text style={Typography.screenHeader}>Currently reading</Text>
           <Text style={styles.bookTitle}>{this.state.bookTitle}</Text>
           <Text style={styles.secondaryHeader}>{`${this.state.daysUntilGoalComplete} days left to meet goal`}</Text>

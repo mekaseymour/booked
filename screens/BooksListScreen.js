@@ -6,13 +6,20 @@ import { fetchPastBooks } from '../helpers/fetchFromStorage';
 import { timeBetweenPastBookStartAndEnd } from '../helpers/lengthOfTimeToFinishBook';
 
 class BooksListScreen extends Component {
+  booksWithKeys = () => {
+    return this.props.books.map((book, i) => {
+      book.key = `book-${i}`;
+      return book;
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
         {!!this.props.books ? (
           <FlatList
             style={styles.list}
-            data={this.props.books.reverse()}
+            data={this.booksWithKeys().reverse()}
             renderItem={({ item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listIconWrapper}>
@@ -50,6 +57,7 @@ const styles = StyleSheet.create({
   listItem: {
     height: 50,
     flexDirection: 'row',
+    marginBottom: 20,
   },
   listItemHeader: {
     fontSize: 16,
