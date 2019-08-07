@@ -17,32 +17,16 @@ class ActiveBookHomeScreen extends Component {
     header: null,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      book: null,
-      bookTitle: null,
-      goalExpiration: null,
-      daysUntilGoalComplete: null,
-      loading: true,
-    };
-  }
-
   componentWillMount = () => {
-    this.timeUntilGoalExpires();
-  };
-
-  timeUntilGoalExpires = async () => {
-    const currentBook = await fetchCurrentBook();
-
+    const book = this.props.book;
     const todaysDate = moment(new Date());
-    const goalDate = moment(new Date(currentBook.completeByGoal));
+    const goalDate = moment(new Date(book.completeByGoal));
+
+    console.log('book from component will mount', book);
 
     this.setState({
-      book: currentBook,
-      bookTitle: currentBook.title,
-      goalExpiration: currentBook.completeByGoal,
+      bookTitle: book.title,
+      goalExpiration: book.completeByGoal,
       daysUntilGoalComplete: goalDate.diff(todaysDate, 'days'),
     });
     this.setState({ loading: false });
@@ -56,8 +40,8 @@ class ActiveBookHomeScreen extends Component {
   };
 
   finishBook = () => {
-    completeBook();
-    this.props.navigation.navigate('Complete', { book: this.state.book });
+    this.props.finishBook();
+    this.props.navigation.navigate('Complete', { book: this.props.book });
   };
 
   render() {
@@ -65,7 +49,6 @@ class ActiveBookHomeScreen extends Component {
       <LoadingPlaceholder />
     ) : (
       <View style={styles.container}>
-        <NavigationEvents onWillFocus={this.timeUntilGoalExpires} />
         <View style={styles.sectionWrapper}>
           <Svg width={44} height={57} source={require('../assets/images/unicorn-icon.svg')} />
           <Text style={Typography.screenHeader}>Currently reading</Text>
@@ -109,6 +92,7 @@ const styles = StyleSheet.create({
   bookTitle: {
     ...Typography.screenHeader,
     color: SCREEN_PRIMARY_COLOR,
+    textAlign: 'center',
   },
   sectionWrapper: {
     alignItems: 'center',

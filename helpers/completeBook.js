@@ -18,7 +18,7 @@ const completeBook = () => {
     })
     .catch(err => console.log(err));
 
-  AsyncStorage.removeItem('currentBook');
+  return AsyncStorage.removeItem('currentBook');
 };
 
 export default completeBook;
