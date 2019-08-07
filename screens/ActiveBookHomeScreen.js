@@ -22,12 +22,10 @@ class ActiveBookHomeScreen extends Component {
     const todaysDate = moment(new Date());
     const goalDate = moment(new Date(book.completeByGoal));
 
-    console.log('book from component will mount', book);
-
     this.setState({
-      bookTitle: book.title,
       goalExpiration: book.completeByGoal,
       daysUntilGoalComplete: goalDate.diff(todaysDate, 'days'),
+      pagesPerDay: this.pagesPerDay(),
     });
     this.setState({ loading: false });
   };
@@ -37,6 +35,22 @@ class ActiveBookHomeScreen extends Component {
       { text: 'Finish Book', onPress: this.finishBook },
       { text: 'Cancel', onPress: () => console.log('cancel'), style: 'cancel' },
     ]);
+  };
+
+  pagesPerDay = () => {
+    const book = this.props.book;
+    const startDate = moment(new Date(book.startDate));
+    const goalDate = moment(new Date(book.completeByGoal));
+
+    return Math.round(book.pages / goalDate.diff(startDate, 'days'));
+  };
+
+  pageGoalForDay = () => {
+    const book = this.props.book;
+    const startDate = moment(new Date(book.startDate));
+    const todaysDate = moment(new Date()).add(1, 'days');
+
+    return todaysDate.diff(startDate, 'days') * this.state.pagesPerDay;
   };
 
   finishBook = () => {
@@ -52,10 +66,12 @@ class ActiveBookHomeScreen extends Component {
         <View style={styles.sectionWrapper}>
           <Svg width={88} height={114} source={require('../assets/images/unicorn-icon.svg')} />
           <Text style={Typography.screenHeader}>Currently reading</Text>
-          <Text style={styles.bookTitle}>{this.state.bookTitle}</Text>
+          <Text style={styles.bookTitle}>{this.props.book.bookTitle}</Text>
           <Text style={styles.secondaryHeader}>{`${this.state.daysUntilGoalComplete} days left to meet goal`}</Text>
         </View>
         <View style={styles.sectionWrapper}>
+          <Text style={styles.reminderText}>{`You should be averaging about ${this.pagesPerDay()} pages per day`}</Text>
+          <Text style={styles.reminderText}>{`(Aim to get to at least page ${this.pageGoalForDay()} today)`}</Text>
           <TouchableOpacity style={styles.ctaButton} onPress={this.showConfirmationAlert}>
             <Text style={Typography.buttonText}>Finish book</Text>
           </TouchableOpacity>
@@ -101,6 +117,12 @@ const styles = StyleSheet.create({
   ctaButton: {
     ...Button.ctaButton,
     backgroundColor: SCREEN_PRIMARY_COLOR,
+    marginTop: 15,
+  },
+  reminderText: {
+    fontSize: 14,
+    color: SCREEN_PRIMARY_COLOR,
+    textAlign: 'center',
   },
   changeGoal: {
     marginTop: 10,
