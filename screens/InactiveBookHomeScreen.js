@@ -7,6 +7,7 @@ import getCompleteByDate from '../helpers/getCompleteByDate';
 import setCurrentBook from '../helpers/storage/setCurrentBook';
 import LoadingPlaceholder from '../components/LoadingPlaceholder';
 import { textInputIsValid } from '../util/validation';
+import getTodaysDateAsLocaleString from '../helpers/getTodaysDateAsLocaleString';
 
 const SCREEN_PRIMARY_COLOR = Colors.purple;
 
@@ -44,6 +45,13 @@ class InactiveBookHomeScreen extends Component {
     if (this.state.bookNameInput && textInputIsValid(this.state.bookNameInput)) {
       getCompleteByDate()
         .then(data => {
+          const bookData = {
+            startDate: getTodaysDateAsLocaleString(),
+            title: this.state.bookNameInput,
+            completeByGoal: data,
+          };
+
+          this.props.startBook(bookData);
           return setCurrentBook(this.state.bookNameInput, data);
         })
         .then(() => this.props.navigation.navigate('Active'));

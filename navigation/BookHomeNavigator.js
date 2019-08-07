@@ -1,8 +1,8 @@
 import React from 'react';
 import { createSwitchNavigator } from 'react-navigation';
 
-import InactiveBookHomeScreen from '../screens/InactiveBookHomeScreen';
-import ActiveBookHomeScreen from '../screens/ActiveBookHomeScreen';
+import InactiveBookHomeScreenContainer from '../containers/InactiveBookHomeScreenContainer';
+import ActiveBookHomeScreenContainer from '../containers/ActiveBookHomeScreenContainer';
 import CompletedBookScreen from '../screens/CompletedBookScreen';
 import WrapperScreen from '../screens/WrapperScreen';
 
@@ -17,8 +17,8 @@ const configureNavigationScreen = (Screen, props) => {
 // how to change the order based on whether or not there's a current book
 
 const BookHomeNavigator = createSwitchNavigator({
-  Inactive: props => configureNavigationScreen(InactiveBookHomeScreen, props),
-  Active: props => configureNavigationScreen(ActiveBookHomeScreen, props),
+  Inactive: props => configureNavigationScreen(InactiveBookHomeScreenContainer, props),
+  Active: props => configureNavigationScreen(ActiveBookHomeScreenContainer, props),
   Complete: props => configureNavigationScreen(CompletedBookScreen, props),
 });
 

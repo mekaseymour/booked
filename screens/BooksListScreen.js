@@ -6,36 +6,13 @@ import { fetchPastBooks } from '../helpers/fetchFromStorage';
 import { timeBetweenPastBookStartAndEnd } from '../helpers/lengthOfTimeToFinishBook';
 
 class BooksListScreen extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      books: null,
-    };
-  }
-
-  componentWillMount() {
-    this.fetchBooksFromStorage();
-  }
-
-  fetchBooksFromStorage = async () => {
-    const books = await fetchPastBooks();
-
-    const booksForState = books.map((book, i) => {
-      return { ...JSON.parse(book), key: `book-${i}` };
-    });
-
-    this.setState({ books: booksForState });
-  };
-
   render() {
     return (
       <View style={styles.container}>
-        <NavigationEvents onWillFocus={this.fetchBooksFromStorage} />
-        {!!this.state.books ? (
+        {!!this.props.books ? (
           <FlatList
             style={styles.list}
-            data={this.state.books.reverse()}
+            data={this.props.books.reverse()}
             renderItem={({ item }) => (
               <View style={styles.listItem}>
                 <View style={styles.listIconWrapper}>

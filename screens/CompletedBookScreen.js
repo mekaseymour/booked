@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   highlightedHeader: {
     ...Typography.screenHeader,
     color: SCREEN_PRIMARY_COLOR,
+    textAlign: 'center',
   },
   iconWrapper: {
     flexDirection: 'row',
